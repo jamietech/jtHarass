@@ -1,0 +1,12 @@
+author: jamietech
+description: "Stop users from interacting with the world, sending messages and more with one command!"
+main: tk.nekotech.harass.Harass
+name: jtHarass
+startup: postworld
+url: http://nekotech.tk/
+website: http://dev.nekotech.tk/
+version: '0.2'
+commands:
+  harass:
+    description: Harasses or revokes harass on user specified
+    usage: /<command> <player>
