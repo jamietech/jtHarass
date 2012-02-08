@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class Listen implements Listener {
@@ -20,6 +21,15 @@ public class Listen implements Listener {
 		this.harass = harass;
 	}
 
+	@EventHandler (priority = EventPriority.LOW)
+	public void omgAnnoyThem(PlayerJoinEvent event) {
+		if (event.getPlayer().hasPermission("jtharass.harass")) {
+			if (harass.nag) { 
+				event.getPlayer().sendMessage(ChatColor.DARK_AQUA + "[jtHarass] " + ChatColor.AQUA + "Update available! Running version " + harass.ver + " whereas latest is " + harass.newver);
+			}
+		}
+	}
+	
 	@EventHandler (priority = EventPriority.HIGH)
 	public void chatStopper(PlayerChatEvent event) {
 		if ((harass.chat.contains(event.getPlayer().getName()) && (harass.harassed.contains(event.getPlayer().getName())))) {

@@ -1,7 +1,5 @@
 package tk.nekotech.harass;
 
-import java.util.ArrayList;
-
 import net.minecraft.server.MobEffect;
 
 import org.bukkit.ChatColor;

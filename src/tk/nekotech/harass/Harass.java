@@ -26,6 +26,9 @@ public class Harass extends JavaPlugin {
 	public ArrayList<String> drop = new ArrayList<String>();
 	public ArrayList<String> silent = new ArrayList<String>();
 	public ArrayList<String> interact = new ArrayList<String>();
+	public boolean nag = false;
+	public String ver = "1.0";
+	public String newver = null;
 
 	@Override
 	public void onDisable() {
@@ -41,8 +44,8 @@ public class Harass extends JavaPlugin {
 		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new Listen(this), this);
 		
-		/*try {
-			URL url = new URL("http://nekotech.tk/logstartup.php?a=jtHarass&b=0.2");
+		try {
+			URL url = new URL("http://nekotech.tk/logstartup.php?a=jtHarass&b=" + ver);
 			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strLine;
 			while((strLine = br.readLine()) != null) {
@@ -52,7 +55,24 @@ public class Harass extends JavaPlugin {
 				}
 			} catch (Exception e) {
 				log.severe("[jtHarass] Failed to log startup, exception!");
-		}*/
+		}
+		try {
+			URL url = new URL("http://nekotech.tk/vercheck.php?a=jtHarass&b=" + ver);
+			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+			String strLine;
+			while((strLine = br.readLine()) != null) {
+				if (strLine.contains("u:")) {
+					String[] s = strLine.split(":");
+					log.severe("[jtHarass] Update available! You're running v" + ver + " whereas latest is " + s[1]);
+					nag = true;
+					newver = s[1];
+				} else {
+					log.severe("[jtHarass] Failed to check for updates, webserver error!");
+				}
+			}
+		} catch (Exception e) {
+			log.severe("[jtHarass] Failed to check for updates, exception!");
+		}
 	}
 
 	public void msgStaff(String message, boolean dolog) {
