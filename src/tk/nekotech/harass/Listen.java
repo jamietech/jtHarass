@@ -10,7 +10,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -23,7 +22,7 @@ public class Listen implements Listener {
 
 	@EventHandler (priority = EventPriority.HIGH)
 	public void chatStopper(PlayerChatEvent event) {
-		if (harass.harassed.contains(event.getPlayer().getName())) {
+		if ((harass.chat.contains(event.getPlayer().getName()) && (harass.harassed.contains(event.getPlayer().getName())))) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(ChatColor.AQUA + "Nope!");
 			harass.msgStaff(ChatColor.AQUA + "[jtHarass] BLOCKED: " + ChatColor.DARK_AQUA + "<" + event.getPlayer().getName()
@@ -33,38 +32,38 @@ public class Listen implements Listener {
 	
 	@EventHandler (priority = EventPriority.HIGH)
 	public void noDrops(PlayerDropItemEvent event) {
-		if (harass.harassed.contains(event.getPlayer().getName())) {
+		if ((harass.harassed.contains(event.getPlayer().getName())) && (harass.drop.contains(event.getPlayer().getName()))) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.AQUA + "Nope!");
-		}
-	}
-	
-	@EventHandler (priority = EventPriority.HIGH)
-	public void noEggs(PlayerEggThrowEvent event) {
-		if (harass.harassed.contains(event.getPlayer().getName())) {
-			event.getEgg().remove();
-			event.getPlayer().sendMessage(ChatColor.AQUA + "Nope!");
+			if (!harass.silent.contains(event.getPlayer().getName())) {
+				event.getPlayer().sendMessage(ChatColor.AQUA + "Nope!");
+			}
 		}
 	}
 	
 	@EventHandler (priority = EventPriority.HIGH)
 	public void noInteract(PlayerInteractEvent event) {
-		if (harass.harassed.contains(event.getPlayer().getName())) {
+		if ((harass.harassed.contains(event.getPlayer().getName())) && (harass.interact.contains(event.getPlayer().getName()))) {
 			event.setCancelled(true);
-			event.getPlayer().sendMessage(ChatColor.AQUA + "Nope!");
+			if (!harass.silent.contains(event.getPlayer().getName())) {
+				event.getPlayer().sendMessage(ChatColor.AQUA + "Nope!");
+			}
 		}
 	}
 	
 	@EventHandler (priority = EventPriority.HIGH)
-	public void youCantDieAndRemoveEffect(PlayerRespawnEvent event) {
+	public void youCantDieAndRemoveEffect(final PlayerRespawnEvent event) {
 		if (harass.harassed.contains(event.getPlayer().getName())) {
 			final Player harassed = event.getPlayer();
 			harass.getServer().getScheduler().scheduleAsyncDelayedTask(harass, new Runnable() {
 				public void run() {
-					((CraftPlayer) harassed).getHandle().addEffect(new MobEffect(2, 999999999, 10)); // slow
-					((CraftPlayer) harassed).getHandle().addEffect(new MobEffect(4, 999999999, 10)); // fatigue
-					harass.msgStaff(ChatColor.AQUA + "[jtHarass] " + ChatColor.DARK_AQUA + "Re-enabled effects on " + harassed.getName(), false);
-					harassed.getWorld().strikeLightningEffect(harassed.getLocation());
+					if (harass.potions.contains(event.getPlayer().getName())) {
+						((CraftPlayer) harassed).getHandle().addEffect(new MobEffect(2, 999999999, 10)); // slow
+						((CraftPlayer) harassed).getHandle().addEffect(new MobEffect(4, 999999999, 10)); // fatigue
+					}
+					if (harass.lightning.contains(event.getPlayer().getName())) {
+						harassed.getWorld().strikeLightningEffect(harassed.getLocation());
+					}
+					harass.msgStaff(ChatColor.AQUA + "[jtHarass] " + ChatColor.DARK_AQUA + "Re-enabled previous effects on " + harassed.getName(), false);
 				}
 			}, 20L);
 		}

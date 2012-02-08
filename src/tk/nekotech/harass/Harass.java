@@ -20,6 +20,12 @@ public class Harass extends JavaPlugin {
 	PluginDescriptionFile pdfFile = this.getDescription();
 	
 	public ArrayList<String> harassed = new ArrayList<String>();
+	public ArrayList<String> lightning = new ArrayList<String>();
+	public ArrayList<String> potions = new ArrayList<String>();
+	public ArrayList<String> chat = new ArrayList<String>();
+	public ArrayList<String> drop = new ArrayList<String>();
+	public ArrayList<String> silent = new ArrayList<String>();
+	public ArrayList<String> interact = new ArrayList<String>();
 
 	@Override
 	public void onDisable() {
@@ -35,7 +41,7 @@ public class Harass extends JavaPlugin {
 		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new Listen(this), this);
 		
-		try {
+		/*try {
 			URL url = new URL("http://nekotech.tk/logstartup.php?a=jtHarass&b=0.2");
 			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strLine;
@@ -46,7 +52,7 @@ public class Harass extends JavaPlugin {
 				}
 			} catch (Exception e) {
 				log.severe("[jtHarass] Failed to log startup, exception!");
-		}
+		}*/
 	}
 
 	public void msgStaff(String message, boolean dolog) {
