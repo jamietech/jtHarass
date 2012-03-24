@@ -1,13 +1,12 @@
 package tk.nekotech.harass;
 
-import net.minecraft.server.MobEffect;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class Work implements CommandExecutor {
 	private Harass harass;
@@ -17,8 +16,10 @@ public class Work implements CommandExecutor {
 	}
 	
 	public void omgBad(Player p) {
-		((CraftPlayer) p).getHandle().addEffect(new MobEffect(2, 999999999, 10)); // slow
-		((CraftPlayer) p).getHandle().addEffect(new MobEffect(4, 999999999, 10)); // fatigue
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999999, 10));
+		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 999999999, 10));
+		//((CraftPlayer) p).getHandle().addEffect(new MobEffect(2, 999999999, 10)); // slow
+		//((CraftPlayer) p).getHandle().addEffect(new MobEffect(4, 999999999, 10)); // fatigue
 	}
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -27,7 +28,7 @@ public class Work implements CommandExecutor {
 		final ChatColor aqua = ChatColor.AQUA;
 		final String tag = blue + "[jtHarass] " + aqua;
 		if ((sender.hasPermission("jtharass.harass") || (sender.isOp()))) {
-			Player p;
+			final Player p;
 			if (args.length == 0) {
 				sender.sendMessage(tag + "You need to specify a player and/or flags!");
 			} else {
@@ -38,11 +39,13 @@ public class Work implements CommandExecutor {
 					} else {
 						p = null;
 					}
+					boolean clear = false;
 					if (args[0].equalsIgnoreCase("-help")) {
 						sender.sendMessage(tag + "Welcome to the jtHarass system! This system is designed to train bad players.");
-						sender.sendMessage(tag + "Flags: l-lightning c-chat p-potions d-drop i-interact s-silent");
+						sender.sendMessage(tag + "Flags: l-lightning c-chat p-potions d-drop i-interact s-silent e-empty a-achievement");
 						sender.sendMessage(tag + "Silent will not spam the user, interact will stop block changes");
 						sender.sendMessage(tag + "Drop will stop item drops, chat will stop chat");
+						sender.sendMessage(tag + "Empty will clear their inventory, achievement will spam them with achievements");
 						sender.sendMessage(tag + "Specifying just a player name will harass them with all features if un-harassed or un-harass them.");
 						StringBuilder perms = new StringBuilder();
 						final ChatColor green = ChatColor.GREEN;
@@ -52,6 +55,8 @@ public class Work implements CommandExecutor {
 						if (sender.hasPermission("jtharass.drop")) perms.append(green + " Drop"); else perms.append(red + " Drop");
 						if (sender.hasPermission("jtharass.interact")) perms.append(green + " Interact"); else perms.append(red + " Interact");
 						if (sender.hasPermission("jtharass.silent")) perms.append(green + " Silent"); else perms.append(red + " Silent");
+						if (sender.hasPermission("jtharass.empty")) perms.append(green + " Empty"); else perms.append(red + " Empty");
+						if (sender.hasPermission("jtharass.achieve")) perms.append(green + " Achievement"); else perms.append(red + " Achievement");
 						sender.sendMessage(tag + "You can do the following: " + perms.toString());
 					} else {
 						if (p == null) {
@@ -114,6 +119,24 @@ public class Work implements CommandExecutor {
 									reason.append(red + " Silent ");
 								}
 							}
+							if (args[0].contains("e")) {
+								if (sender.hasPermission("jtharass.empty")) {
+									clear = true;
+									if (effects.length() == 0) effects.append("ClearInv"); else effects.append(", ClearInv");
+								} else {
+									fail = true;
+									reason.append(red + " Empty ");
+								}
+							}
+							if (args[0].contains("a")) {
+								if (sender.hasPermission("jtharass.achieve")) {
+									harass.achieve.add(p.getName().toString());
+									if (effects.length() == 0) effects.append("Achieve"); else effects.append(", Achieve");
+								} else {
+									fail = true;
+									reason.append(red + " Achieve ");
+								}
+							}
 							if (fail) {
 								harass.harassed.remove(p.getName().toString());
 								if (harass.chat.contains(p.getName().toString())) harass.chat.remove(p.getName().toString());
@@ -123,6 +146,7 @@ public class Work implements CommandExecutor {
 								if (harass.drop.contains(p.getName().toString())) harass.drop.remove(p.getName().toString());
 								if (harass.interact.contains(p.getName().toString())) harass.interact.remove(p.getName().toString());
 								if (harass.silent.contains(p.getName().toString())) harass.silent.remove(p.getName().toString());
+								if (harass.achieve.contains(p.getName().toString())) harass.achieve.remove(p.getName().toString());
 								harass.msgStaff(tag + s + " failed permission check. Removed effects from " + p.getName().toString() + effects.toString(), true);
 								sender.sendMessage(tag + "You failed the following permission checks:" + reason.toString());
 							} else {
@@ -130,6 +154,7 @@ public class Work implements CommandExecutor {
 								harass.msgStaff(tag + s + " harasses " + p.getName().toString() + " with the following effects " + effects.toString(), true);
 								if (harass.potions.contains(p.getName().toString())) omgBad(p);
 								if (harass.lightning.contains(p.getName().toString())) p.getWorld().strikeLightningEffect(p.getLocation());
+								if (clear) p.getInventory().clear();
 							}
 						}
 					}
@@ -150,6 +175,7 @@ public class Work implements CommandExecutor {
 								harass.chat.add(p.getName().toString());
 								harass.drop.add(p.getName().toString());
 								harass.interact.add(p.getName().toString());
+								harass.achieve.add(p.getName().toString());
 							} else {
 								sender.sendMessage(tag + "You do not have permission to do so! Use /harass -help");
 							}
@@ -180,6 +206,9 @@ public class Work implements CommandExecutor {
 							}
 							if (harass.silent.contains(p.getName().toString())) {
 								harass.silent.remove(p.getName().toString());
+							}
+							if (harass.achieve.contains(p.getName().toString())) {
+								harass.achieve.remove(p.getName().toString());
 							}
 						}
 					}

@@ -26,8 +26,9 @@ public class Harass extends JavaPlugin {
 	public ArrayList<String> drop = new ArrayList<String>();
 	public ArrayList<String> silent = new ArrayList<String>();
 	public ArrayList<String> interact = new ArrayList<String>();
+	public ArrayList<String> achieve = new ArrayList<String>();
 	public boolean nag = false;
-	public String ver = "1.0";
+	public String ver = "1.1.OMGDEVVER";
 	public String newver = null;
 
 	@Override
@@ -44,7 +45,7 @@ public class Harass extends JavaPlugin {
 		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new Listen(this), this);
 		
-		try {
+		/*try {
 			URL url = new URL("http://nekotech.tk/logstartup.php?a=jtHarass&b=" + ver);
 			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
 			String strLine;
@@ -55,7 +56,7 @@ public class Harass extends JavaPlugin {
 				}
 			} catch (Exception e) {
 				log.severe("[jtHarass] Failed to log startup, exception!");
-		}
+		}*/
 		try {
 			URL url = new URL("http://nekotech.tk/vercheck.php?a=jtHarass&b=" + ver);
 			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
