@@ -56,7 +56,7 @@ public class Harass extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(playerdropitem, this);
 		getServer().getPluginManager().registerEvents(playerjoin, this);
 		getServer().getPluginManager().registerEvents(playermove, this);
-		getSrever().getPluginManager().registerEvents(playerrespawn, this);
+		getServer().getPluginManager().registerEvents(playerrespawn, this);
 
 	}
 		
