@@ -1,90 +1,83 @@
 package tk.nekotech.harass;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.logging.Logger;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.*;
 
-import tk.nekotech.harass.Listen;
+import tk.nekotech.commands.HarassCommand;
+import tk.nekotech.harass.events.PlayerChat;
+import tk.nekotech.harass.events.PlayerDropItem;
+import tk.nekotech.harass.events.PlayerInteract;
+import tk.nekotech.harass.events.PlayerJoin;
+import tk.nekotech.harass.events.PlayerMove;
+import tk.nekotech.harass.events.PlayerRespawn;
+import tk.nekotech.harass.helpers.Achievements;
+import tk.nekotech.harass.helpers.ArrayLists;
+import tk.nekotech.harass.helpers.Colors;
+import tk.nekotech.harass.helpers.Potions;
+import tk.nekotech.harass.helpers.Staff;
+import tk.nekotech.harass.helpers.StartupLog;
+import tk.nekotech.harass.helpers.Version;
+import tk.nekotech.harass.permissions.Permissions;
 
 public class Harass extends JavaPlugin {
 	
-	public Logger log = Logger.getLogger("Minecraft");
-	PluginDescriptionFile pdfFile = this.getDescription();
+	public HarassCommand harasscommand = new HarassCommand(this);
 	
-	public ArrayList<String> harassed = new ArrayList<String>();
-	public ArrayList<String> lightning = new ArrayList<String>();
-	public ArrayList<String> potions = new ArrayList<String>();
-	public ArrayList<String> chat = new ArrayList<String>();
-	public ArrayList<String> drop = new ArrayList<String>();
-	public ArrayList<String> silent = new ArrayList<String>();
-	public ArrayList<String> interact = new ArrayList<String>();
-	public ArrayList<String> achieve = new ArrayList<String>();
-	public boolean nag = false;
-	public String ver = "1.1.OMGDEVVER";
+	public PlayerChat playerchat = new PlayerChat(this);
+	public PlayerDropItem playerdropitem = new PlayerDropItem(this);
+	public PlayerInteract playerinteract = new PlayerInteract(this);
+	public PlayerJoin playerjoin = new PlayerJoin(this);
+	public PlayerMove playermove = new PlayerMove(this);
+	public PlayerRespawn playerrespawn = new PlayerRespawn(this);
+	
+	public Achievements achievements = new Achievements();
+	public ArrayLists arraylists = new ArrayLists();
+	public Colors colors = new Colors();
+	public Potions potions = new Potions(this);
+	public Staff staff = new Staff(this);
+	public StartupLog startuplog = new StartupLog(this);
+	public Version version = new Version(this);
+	
+	public Permissions permissions = new Permissions();
+	
+	public boolean outOfDate = false;
+	public String ver = null;
 	public String newver = null;
 
-	@Override
-	public void onDisable() {
-		log.info("[jtHarass] Disabled!");
-	}
-
-	@Override
 	public void onEnable() {
-		log.info("[jtHarass] Enabled!");
 		
-		this.getCommand("harass").setExecutor(new Work(this));
+		startuplog.logStartup();
 		
-		final PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvents(new Listen(this), this);
+		ver = getDescription().getVersion();
+		version.checkVersion();
+	
+		getCommand("harass").setExecutor(new Work(this));
 		
-		/*try {
-			URL url = new URL("http://nekotech.tk/logstartup.php?a=jtHarass&b=" + ver);
-			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-			String strLine;
-			while((strLine = br.readLine()) != null) {
-					if (!strLine.equals("true")) {
-						log.severe("[jtHarass] Failed to log startup, webserver error!");
-					}
-				}
-			} catch (Exception e) {
-				log.severe("[jtHarass] Failed to log startup, exception!");
-		}*/
-		try {
-			URL url = new URL("http://nekotech.tk/vercheck.php?a=jtHarass&b=" + ver);
-			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-			String strLine;
-			while((strLine = br.readLine()) != null) {
-				if (strLine.contains("u:")) {
-					String[] s = strLine.split(":");
-					log.severe("[jtHarass] Update available! You're running v" + ver + " whereas latest is " + s[1]);
-					nag = true;
-					newver = s[1];
-				} else {
-					log.severe("[jtHarass] Failed to check for updates, webserver error!");
-				}
-			}
-		} catch (Exception e) {
-			log.severe("[jtHarass] Failed to check for updates, exception!");
-		}
-	}
+		getServer().getPluginManager().registerEvents(playerchat, this);
+		getServer().getPluginManager().registerEvents(playerdropitem, this);
+		getServer().getPluginManager().registerEvents(playerjoin, this);
+		getServer().getPluginManager().registerEvents(playermove, this);
+		getSrever().getPluginManager().registerEvents(playerrespawn, this);
 
-	public void msgStaff(String message, boolean dolog) {
-		for (final Player player : this.getServer().getOnlinePlayers()) {
-			if ((player.hasPermission("jtharass.harass")) || (player.isOp())) {
-				player.sendMessage(message);
-			}
-		}
-		if (dolog) {
-			log.info(ChatColor.stripColor(message));
-		}
+	}
+		
+	
+	public void onDisable() {
+		StringBuilder msg = new StringBuilder();
+		msg.append(arraylists.HARASSED.size() + " harassed players of which ");
+		msg.append(arraylists.POTIONS.size() + " had potions flag, ");
+		msg.append(arraylists.CHAT.size() + " had quiet harass flag, ");
+		msg.append(arraylists.DROP.size() + " had drop blocking flag, ");
+		msg.append(arraylists.SILENT.size() + " had chat blocking flag, ");
+		msg.append(arraylists.INTERACT.size() + " had interaction blocking flag, ");
+		msg.append(arraylists.ACHIEVEMENT.size() + " had achievement flag");
+		getLogger().info("Cleared " + msg.toString());
+		arraylists.HARASSED.clear();
+		arraylists.POTIONS.clear();
+		arraylists.CHAT.clear();
+		arraylists.DROP.clear();
+		arraylists.SILENT.clear();
+		arraylists.INTERACT.clear();
+		arraylists.ACHIEVEMENT.clear();
 	}
 	
 }

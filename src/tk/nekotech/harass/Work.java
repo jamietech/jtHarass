@@ -15,12 +15,14 @@ public class Work implements CommandExecutor {
 		this.harass = harass;
 	}
 	
-	public void omgBad(Player p) {
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999999, 10));
-		p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 999999999, 10));
-		//((CraftPlayer) p).getHandle().addEffect(new MobEffect(2, 999999999, 10)); // slow
-		//((CraftPlayer) p).getHandle().addEffect(new MobEffect(4, 999999999, 10)); // fatigue
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+		// TODO: Command
+		return false;
 	}
+	
+	/*
+	  
+	 BROKEN SO HARD
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		final ChatColor red = ChatColor.RED;
@@ -219,5 +221,7 @@ public class Work implements CommandExecutor {
 		}
 		return true;
 	}
+	
+	*/
 
 }
