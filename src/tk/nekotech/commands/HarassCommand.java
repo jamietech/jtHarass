@@ -21,29 +21,33 @@ public class HarassCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if (args.length == 0) {
-			sender.sendMessage(T + "You need to specify a player and/or flags!");
-			return true;
-		}
-		if (args[0].startsWith("-")) {
-			if (args[0].replace("-", "").toLowerCase().equals("help")) {
-				harass.help.parseHelp(sender, args[0].replace("-", ""));
+		if (sender.hasPermission(harass.permissions.ADMIN)) {
+			if (args.length == 0) {
+				sender.sendMessage(T + "You need to specify a player and/or flags!");
 				return true;
 			}
-			Player target = harass.getServer().getPlayer(args[0]);
-			if (target == null) {
-				sender.sendMessage(T + "Player " + DA + args[0] + A + " could not be found. Either matches too many players or not online!");
+			if (args[0].startsWith("-")) {
+				if (args[0].replace("-", "").toLowerCase().equals("help")) {
+					harass.help.parseHelp(sender, args[0].replace("-", ""));
+					return true;
+				}
+				Player target = harass.getServer().getPlayer(args[0]);
+				if (target == null) {
+					sender.sendMessage(T + "Player " + DA + args[0] + A + " could not be found. Either matches too many players or not online!");
+				} else {
+					harass.harassment.addHarass(sender, target, args[0].replace("-", ""));
+				}
 			} else {
-				harass.harassment.addHarass(sender, target, args[0].replace("-", ""));
+				Player target = harass.getServer().getPlayer(args[0]);
+				if (target == null) {
+					sender.sendMessage(T + "Player " + DA + args[0] + A + " could not be found. Either matches too many players or not online!");
+				} else {
+					String flags = harass.flags.ACHIEVEMENT + harass.flags.CHAT + harass.flags.DROP + harass.flags.INTERACT + harass.flags.LIGHTNING + harass.flags.POTIONS;
+					harass.harassment.addHarass(sender, target, flags);
+				}
 			}
 		} else {
-			Player target = harass.getServer().getPlayer(args[0]);
-			if (target == null) {
-				sender.sendMessage(T + "Player " + DA + args[0] + A + " could not be found. Either matches too many players or not online!");
-			} else {
-				String flags = harass.flags.ACHIEVEMENT + harass.flags.CHAT + harass.flags.DROP + harass.flags.INTERACT + harass.flags.LIGHTNING + harass.flags.POTIONS;
-				harass.harassment.addHarass(sender, target, flags);
-			}
+			sender.sendMessage(ChatColor.RED + "You don't have access to that command!");
 		}
 		return true;
 	}
