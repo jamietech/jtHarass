@@ -44,20 +44,15 @@ public class Harass extends JavaPlugin {
 	public String newver = null;
 
 	public void onEnable() {
-		
 		startuplog.logStartup();
-		
 		ver = getDescription().getVersion();
 		version.checkVersion();
-	
 		getCommand("harass").setExecutor(new Work(this));
-		
 		getServer().getPluginManager().registerEvents(playerchat, this);
 		getServer().getPluginManager().registerEvents(playerdropitem, this);
 		getServer().getPluginManager().registerEvents(playerjoin, this);
 		getServer().getPluginManager().registerEvents(playermove, this);
 		getServer().getPluginManager().registerEvents(playerrespawn, this);
-
 	}
 		
 	
