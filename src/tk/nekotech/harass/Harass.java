@@ -3,6 +3,7 @@ package tk.nekotech.harass;
 import org.bukkit.plugin.java.*;
 
 import tk.nekotech.commands.HarassCommand;
+import tk.nekotech.commands.Help;
 import tk.nekotech.harass.events.PlayerChat;
 import tk.nekotech.harass.events.PlayerDropItem;
 import tk.nekotech.harass.events.PlayerInteract;
@@ -12,6 +13,8 @@ import tk.nekotech.harass.events.PlayerRespawn;
 import tk.nekotech.harass.helpers.Achievements;
 import tk.nekotech.harass.helpers.ArrayLists;
 import tk.nekotech.harass.helpers.Colors;
+import tk.nekotech.harass.helpers.Flags;
+import tk.nekotech.harass.helpers.Harassment;
 import tk.nekotech.harass.helpers.Potions;
 import tk.nekotech.harass.helpers.Staff;
 import tk.nekotech.harass.helpers.StartupLog;
@@ -21,6 +24,7 @@ import tk.nekotech.harass.permissions.Permissions;
 public class Harass extends JavaPlugin {
 	
 	public HarassCommand harasscommand = new HarassCommand(this);
+	public Help help = new Help(this);
 	
 	public PlayerChat playerchat = new PlayerChat(this);
 	public PlayerDropItem playerdropitem = new PlayerDropItem(this);
@@ -32,12 +36,14 @@ public class Harass extends JavaPlugin {
 	public Achievements achievements = new Achievements();
 	public ArrayLists arraylists = new ArrayLists();
 	public Colors colors = new Colors();
+	public Flags flags = new Flags(this);
+	public Harassment harassment = new Harassment(this);
 	public Potions potions = new Potions(this);
 	public Staff staff = new Staff(this);
 	public StartupLog startuplog = new StartupLog(this);
 	public Version version = new Version(this);
 	
-	public Permissions permissions = new Permissions();
+	public Permissions permissions = new Permissions(this);
 	
 	public boolean outOfDate = false;
 	public String ver = null;
