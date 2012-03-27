@@ -14,7 +14,15 @@ public class Staff {
 	
 	private ChatColor A = ChatColor.AQUA;
 	private ChatColor DA = ChatColor.DARK_AQUA;
-	public String OUTOFDATEMESSAGE = DA + "[jtHarass]" + A + " Server " + DA + "out of date" + A + ". Running version " + DA + harass.ver + A + " whereas latest is " + DA + harass.newver + A + " download new version from " + DA + "http://dev.bukkit.org/server-mods/jtharass"; 
+	public String OUTOFDATEMESSAGE = null;
+	
+	public void genOODMessage() {
+		OUTOFDATEMESSAGE = DA + "[jtHarass]" + A + " Server " + DA + "out of date" + A + ". Running version " + DA + harass.ver + A + " whereas latest is " + DA + harass.newver + A + " download new version from " + DA + "http://dev.bukkit.org/server-mods/jtharass";
+	}
+	
+	public void genBADMessage() {
+		OUTOFDATEMESSAGE = "SHITS BROKEN YO'";
+	}
 
 	public void messageStaff(String message, boolean log) {
 		for (Player player : harass.getServer().getOnlinePlayers()) {

@@ -28,8 +28,10 @@ public class Version {
 					harass.getLogger().severe("Failed to check for updates, webserver error!");
 				}
 			}
+			harass.staff.genOODMessage();
 		} catch (Exception e) {
 			harass.getLogger().severe("Failed to check for updates, exception!");
+			harass.staff.genBADMessage();
 		}
 	}
 
