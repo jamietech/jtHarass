@@ -53,6 +53,7 @@ public class Harass extends JavaPlugin {
 		startuplog.logStartup();
 		ver = getDescription().getVersion();
 		version.checkVersion();
+		flags.setup();
 		getCommand("harass").setExecutor(harasscommand);
 		getServer().getPluginManager().registerEvents(playerchat, this);
 		getServer().getPluginManager().registerEvents(playerdropitem, this);

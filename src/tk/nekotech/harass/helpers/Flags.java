@@ -38,6 +38,10 @@ public class Flags {
 	public String SILENT = "s";
 	public String SILENT_DESC = "Stops drop and interact cancel messages being from being sent to the target player.";
 	
+	public void setup() {
+		harass.permissions.genInfo();
+	}
+	
 	public String getPlayerFlags(CommandSender player) {
 		String flags = "";
 		if (player.hasPermission(harass.permissions.ACHIEVEMENT)) {

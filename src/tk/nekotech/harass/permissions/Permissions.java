@@ -13,31 +13,43 @@ public class Permissions {
 	}
 	
 	public String ADMIN = "jtharass.admin";
-	public String ADMIN_INFO = "Allows the player to use the base /harass command and recieve information about harass";
+	public String ADMIN_INFO = null;
 	
 	public String ACHIEVEMENT = "jtharass.achieve";
-	public String ACHIEVEMENT_INFO = "Allows use of " + harass.flags.ACHIEVEMENT + " flag";
+	public String ACHIEVEMENT_INFO = null;
 	
 	public String CHAT = "jtharass.chat";
-	public String CHAT_INFO = "Allows use of " + harass.flags.CHAT + " flag";
+	public String CHAT_INFO = null;
 	
 	public String DROP = "jtharass.drop";
-	public String DROP_INFO = "Allows use of " + harass.flags.DROP + " flag";
+	public String DROP_INFO = null;
 	
 	public String EMPTY = "jtharass.empty";
-	public String EMPTY_INFO = "Allows use of " + harass.flags.EMPTY + " flag";
+	public String EMPTY_INFO = null;
 	
 	public String INTERACT = "jtharass.interact";
-	public String INTERACT_INFO = "Allows use of " + harass.flags.INTERACT + " flag";
+	public String INTERACT_INFO = null;
 	
 	public String LIGHTNING = "jtharass.lightning";
-	public String LIGHTNING_INFO = "Allows use of " + harass.flags.LIGHTNING + " flag";
+	public String LIGHTNING_INFO = null;
 	
 	public String POTIONS = "jtharass.potions";
-	public String POTIONS_INFO = "Allows use of " + harass.flags.POTIONS + " flag";
+	public String POTIONS_INFO= null;
 	
 	public String SILENT = "jtharass.silent";
-	public String SILENT_INFO = "Allows the use of " + harass.flags.SILENT + " flag";
+	public String SILENT_INFO= null;
+	
+	public void genInfo() {
+		ADMIN_INFO = "Allows the player to use the base /harass command and recieve information about harass";
+		ACHIEVEMENT_INFO = "Allows use of " + harass.flags.ACHIEVEMENT + " flag";
+		CHAT_INFO = "Allows use of " + harass.flags.CHAT + " flag";
+		DROP_INFO = "Allows use of " + harass.flags.DROP + " flag";
+		EMPTY_INFO = "Allows use of " + harass.flags.EMPTY + " flag";
+		INTERACT_INFO = "Allows use of " + harass.flags.INTERACT + " flag";
+		LIGHTNING_INFO = "Allows use of " + harass.flags.LIGHTNING + " flag";
+		POTIONS_INFO = "Allows use of " + harass.flags.POTIONS + " flag";
+		SILENT_INFO = "Allows the use of " + harass.flags.SILENT + " flag";
+	}
 	
 	public String getPlayerPermissions(CommandSender a) {
 		StringBuilder b = new StringBuilder();
