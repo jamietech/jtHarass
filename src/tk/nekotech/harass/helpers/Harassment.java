@@ -13,7 +13,7 @@ public class Harassment {
 		this.harass = harass;
 	}
 	
-	public boolean isHarassed(Player player) {
+	public boolean isHarassed(CommandSender player) {
 		if (harass.arraylists.HARASSED.contains(player.getName())) {
 			return true;
 		}

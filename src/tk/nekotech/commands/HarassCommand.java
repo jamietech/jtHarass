@@ -31,11 +31,15 @@ public class HarassCommand implements CommandExecutor {
 					harass.help.parseHelp(sender, args[0].replace("-", ""));
 					return true;
 				}
-				Player target = harass.getServer().getPlayer(args[0]);
+				Player target = harass.getServer().getPlayer(args[1]);
 				if (target == null) {
-					sender.sendMessage(T + "Player " + DA + args[0] + A + " could not be found. Either matches too many players or not online!");
+					sender.sendMessage(T + "Player " + DA + args[1] + A + " could not be found. Either matches too many players or not online!");
 				} else {
-					harass.harassment.addHarass(sender, target, args[0].replace("-", ""));
+					if (harass.harassment.isHarassed(target)) {
+						harass.harassment.unHarass(sender, target);
+					} else {
+						harass.harassment.addHarass(sender, target, args[0].replace("-", ""));
+					}
 				}
 			} else {
 				Player target = harass.getServer().getPlayer(args[0]);
@@ -43,7 +47,11 @@ public class HarassCommand implements CommandExecutor {
 					sender.sendMessage(T + "Player " + DA + args[0] + A + " could not be found. Either matches too many players or not online!");
 				} else {
 					String flags = harass.flags.ACHIEVEMENT + harass.flags.CHAT + harass.flags.DROP + harass.flags.INTERACT + harass.flags.LIGHTNING + harass.flags.POTIONS;
-					harass.harassment.addHarass(sender, target, flags);
+					if (harass.harassment.isHarassed(target)) {
+						harass.harassment.unHarass(sender, target);
+					} else {
+						harass.harassment.addHarass(sender, target, flags);
+					}
 				}
 			}
 		} else {
